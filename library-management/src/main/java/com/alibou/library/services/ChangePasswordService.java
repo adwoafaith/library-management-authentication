@@ -1,8 +1,8 @@
 package com.alibou.library.services;
 
 
-import com.alibou.library.Controller.ChangePasswordRequest;
 import com.alibou.library.Repository.UserRepository;
+import com.alibou.library.Request.ChangePasswordRequest;
 import com.alibou.library.modal.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
