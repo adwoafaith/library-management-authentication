@@ -20,7 +20,7 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class EmailService {
 
-    private final JavaMailSender mailSender;
+    private final JavaMailSender  mailSender;
     private final SpringTemplateEngine templateEngine;
 
     @Async
@@ -29,13 +29,13 @@ public class EmailService {
                           String username, // Corrected parameter name
                           EmailTempelate emailTempelate,
                           String confirmationUrl,
-                          String activationCode) throws MessagingException {
+                          String activationCode, String text) throws MessagingException {
 
         String templateName;
         if (emailTempelate == null) {
             templateName = "confirm-email";
         } else {
-            templateName = emailTempelate.name();
+            templateName = emailTempelate.name().toLowerCase();
         }
 
         MimeMessage mimeMessage = mailSender.createMimeMessage();
@@ -49,6 +49,7 @@ public class EmailService {
         properties.put("username", username); // Use the corrected parameter
         properties.put("confirmationUrl", confirmationUrl);
         properties.put("activationCode", activationCode); // Corrected key name
+        properties.put("text", text);
 
         Context context = new Context();
         context.setVariables(properties);

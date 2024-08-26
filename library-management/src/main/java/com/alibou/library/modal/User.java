@@ -42,6 +42,9 @@ public class User implements UserDetails, Principal {
     @ManyToMany(fetch = FetchType.EAGER) //meaning when i fetch the users i want to eagerly fetch the roles
     private List<Role> roles;
 
+     @OneToOne(mappedBy = "user")
+    private ForgotPassword forgotPassword;
+
     @CreatedDate
     @Column(unique = false,updatable = false) // false meaning when i update my entity it shouldn't update the date created as well
     private LocalDate dateCreated;
