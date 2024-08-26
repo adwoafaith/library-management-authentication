@@ -75,7 +75,8 @@ public class AuthenticationService {
                 user.getFirstname(),
                 EmailTempelate.ACTIVATE_ACCOUNT,
                 activationUrl,
-                newToken
+                newToken,
+                null
         );
 
     }
