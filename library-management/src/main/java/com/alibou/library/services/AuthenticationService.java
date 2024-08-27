@@ -7,14 +7,20 @@ import com.alibou.library.Repository.TokenRepository;
 import com.alibou.library.Repository.UserRepository;
 import com.alibou.library.Request.AuthenticationRequest;
 import com.alibou.library.Request.RegistrationRequest;
+import com.alibou.library.handler.BusinessErrorCodes;
+import com.alibou.library.handler.BusinessException;
 import com.alibou.library.modal.Token;
 import com.alibou.library.modal.User;
+import com.alibou.library.response.RegistrationResponse;
 import com.alibou.library.security.JwtService;
 import jakarta.mail.MessagingException;
 import jakarta.validation.Valid;
+import lombok.Builder;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -41,7 +47,12 @@ public class AuthenticationService {
     private String activationUrl;
 
 
-    public void register(@Valid RegistrationRequest request) throws MessagingException {
+    public ResponseEntity<RegistrationResponse> register(@Valid RegistrationRequest request) throws MessagingException {
+
+        //check if the email already exists
+        if(userRepository.existsByEmail(request.getEmail())){
+            throw new BusinessException(BusinessErrorCodes.EMAIL_ALREADY_EXISTS);
+        }
 
         //To register a user we need to assign it a role by default and by default they are users
         // we fetch the role by name and assign it to the user
@@ -63,6 +74,11 @@ public class AuthenticationService {
         userRepository.save(user);
 
         sendValidationEmail(user);
+        return ResponseEntity.ok(RegistrationResponse.builder()
+                .message("User registered Sucessfully.Please check your mail for verification")
+                        .statusCode(200)
+                .build());
+
     }
 
     private void sendValidationEmail(User user) throws MessagingException {
@@ -119,10 +135,10 @@ public class AuthenticationService {
             claims.put("fullname", user.fullname());
             var jwtToken = jwtService.generateToken(claims, user);
             return AuthenticateResponse.builder().token(jwtToken).build();
-        } catch (Exception e) {
-            // Log the exception for debugging
+        } catch (BadCredentialsException e) {
+
             e.printStackTrace();
-            throw e;
+            throw new BusinessException(BusinessErrorCodes.USER_NOT_FOUND);
         }
     }
 

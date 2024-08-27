@@ -16,7 +16,7 @@ import java.security.Principal;
 
 
 @RestController
-@RequestMapping("/api/v1/users")
+@RequestMapping("/api/v1/reset-password")
 @RequiredArgsConstructor
 
 public class ChangePasswordController {

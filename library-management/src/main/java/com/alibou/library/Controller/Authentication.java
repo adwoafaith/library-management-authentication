@@ -2,6 +2,7 @@ package com.alibou.library.Controller;
 
 import com.alibou.library.Request.AuthenticationRequest;
 import com.alibou.library.Request.RegistrationRequest;
+import com.alibou.library.response.RegistrationResponse;
 import com.alibou.library.services.AuthenticationService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.mail.MessagingException;
@@ -25,9 +26,8 @@ public class Authentication {
     @PostMapping("/register")
     @ResponseStatus(HttpStatus.ACCEPTED)
 
-    public ResponseEntity<?> register(@RequestBody @Valid RegistrationRequest request) throws MessagingException {
-        service.register(request);
-        return ResponseEntity.accepted().build();
+    public ResponseEntity<RegistrationResponse> register(@RequestBody @Valid RegistrationRequest request) throws MessagingException {
+       return service.register(request);
 
     }
     //login

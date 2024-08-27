@@ -2,6 +2,7 @@ package com.alibou.library.handler;
 
 import jakarta.mail.MessagingException;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.LockedException;
@@ -69,20 +70,24 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ExceptionResponse> handleException(MethodArgumentNotValidException exp){
-        Set<String> errors = new HashSet<>();
-        exp.getBindingResult().getAllErrors()
-                .forEach(error -> {
-                    var errorMessage = error.getDefaultMessage();
-                    errors.add(errorMessage);
-                });
+        StringBuilder validationErrors = new StringBuilder();
+        exp.getBindingResult().getAllErrors().forEach(error -> {
+            if (validationErrors.length() > 0) {
+                validationErrors.append(", "); // Add a delimiter between errors
+            }
+            validationErrors.append(error.getDefaultMessage());
+        });
         return ResponseEntity
                 .status(BAD_REQUEST)
                 .body(
                         ExceptionResponse.builder()
-                                .validationErrors(errors)
+                                .validationErrors(validationErrors.toString())
                                 .build()
                 );
     }
+
+
+
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ExceptionResponse> handleException(Exception exp){
@@ -96,4 +101,19 @@ public class GlobalExceptionHandler {
                                 .build()
                 );
     }
+
+    @ExceptionHandler(BusinessException.class)
+    public ResponseEntity<ExceptionResponse> handleBusinessException(BusinessException exp){
+        BusinessErrorCodes errorCode = exp.getErrorCode();
+        return ResponseEntity
+                .status(errorCode.getHttpStatus())
+                .body(
+                        ExceptionResponse.builder()
+                                .businessErrorCode(errorCode.getCode())
+                                .businessErrorDescription(errorCode.getDescription())
+                                .error(exp.getMessage())
+                                .build()
+                );
+    }
+
 }
