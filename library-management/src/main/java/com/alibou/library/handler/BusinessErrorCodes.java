@@ -14,7 +14,7 @@ public enum BusinessErrorCodes {
     INCORRECT_CURRENT_PASSWORD(300,BAD_REQUEST, "Current password is incorrect"),
     NEW_PASSWORD_DOES_NOT_MATH(301,BAD_REQUEST, "The new password does not math"),
     ACCOUNT_LOCKED(302,FORBIDDEN,"User account is locked"),
-    ACCOUNT_DISABLED(303,FORBIDDEN,"User account is disabled"),
+    ACCOUNT_DISABLED(303,FORBIDDEN,"User account not verified"),
     BAD_CREDENTIALS(400,BAD_REQUEST, "Invalid email or password"),
     USER_NOT_FOUND(404, NOT_FOUND, "User not found"),
     EMAIL_ALREADY_EXISTS(409,CONFLICT,"Email already exists");

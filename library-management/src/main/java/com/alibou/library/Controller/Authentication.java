@@ -1,7 +1,9 @@
 package com.alibou.library.Controller;
 
-import com.alibou.library.Request.AuthenticationRequest;
+import com.alibou.library.Request.loginRequest;
 import com.alibou.library.Request.RegistrationRequest;
+import com.alibou.library.response.ActivationResponse;
+import com.alibou.library.response.LoginResponse;
 import com.alibou.library.response.RegistrationResponse;
 import com.alibou.library.services.AuthenticationService;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -31,19 +33,19 @@ public class Authentication {
 
     }
     //login
-    @PostMapping("/authenticate")
-    public ResponseEntity<AuthenticateResponse> authenticate(
-            @RequestBody @Valid AuthenticationRequest request
+    @PostMapping("/login")
+    public ResponseEntity<LoginResponse> login(
+            @RequestBody @Valid loginRequest request
     )
     {
-        return ResponseEntity.ok(service.authenticate(request));
+        return service.login(request);
     }
 
     @GetMapping("/activate-account")
-    public void confrimAccount(
+    public ResponseEntity<ActivationResponse> confrimAccount(
             @RequestParam String token
     ) throws MessagingException {
-        service.activateAccount(token);
+         return service.activateAccount(token);
     }
 
 

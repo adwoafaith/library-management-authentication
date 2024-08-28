@@ -1,6 +1,7 @@
 package com.alibou.library.handler;
 
 import jakarta.mail.MessagingException;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -25,7 +26,7 @@ public class GlobalExceptionHandler {
                 .body(
                         ExceptionResponse.builder()
                                 .businessErrorCode(BusinessErrorCodes.ACCOUNT_LOCKED.getCode())
-                                .businessErrorDescription(BusinessErrorCodes.ACCOUNT_LOCKED.getDescription())
+                                //.businessErrorDescription(BusinessErrorCodes.ACCOUNT_LOCKED.getDescription())
                                 .error(exp.getMessage())
                                 .build()
                 );
@@ -38,7 +39,7 @@ public class GlobalExceptionHandler {
                 .body(
                         ExceptionResponse.builder()
                                 .businessErrorCode(BusinessErrorCodes.ACCOUNT_DISABLED.getCode())
-                                .businessErrorDescription(BusinessErrorCodes.ACCOUNT_DISABLED.getDescription())
+                                //.businessErrorDescription(BusinessErrorCodes.ACCOUNT_DISABLED.getDescription())
                                 .error(exp.getMessage())
                                 .build()
                 );
@@ -110,10 +111,37 @@ public class GlobalExceptionHandler {
                 .body(
                         ExceptionResponse.builder()
                                 .businessErrorCode(errorCode.getCode())
-                                .businessErrorDescription(errorCode.getDescription())
                                 .error(exp.getMessage())
                                 .build()
                 );
     }
+
+    @ExceptionHandler(TokenNotFoundException.class)
+    public ResponseEntity<ExceptionResponse> handleTokenNotFoundException(TokenNotFoundException ex) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
+                ExceptionResponse.builder()
+                        .error(ex.getMessage())
+                        .build()
+        );
+    }
+
+    @ExceptionHandler(TokenNotFoundException.TokenExpiredException.class)
+    public ResponseEntity<ExceptionResponse> handleTokenExpiredException(TokenNotFoundException.TokenExpiredException ex) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
+                ExceptionResponse.builder()
+                        .error(ex.getMessage())
+                        .build()
+        );
+    }
+
+    @ExceptionHandler(TokenNotFoundException.UserNotFoundException.class)
+    public ResponseEntity<ExceptionResponse> handleUserNotFoundException(TokenNotFoundException.UserNotFoundException ex) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
+                ExceptionResponse.builder()
+                        .error(ex.getMessage())
+                        .build()
+        );
+    }
+
 
 }
