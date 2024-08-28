@@ -1,6 +1,7 @@
 package com.alibou.library.Request;
 
 
+import com.alibou.library.handler.CustomEmail;
 import com.alibou.library.handler.ValidPassword;
 import jakarta.validation.constraints.*;
 import lombok.Builder;
@@ -17,7 +18,7 @@ public class RegistrationRequest {
     private String lastName;
 
     @Email(message = "Email should be in a proper format")
-    @NotBlank(message = "Email is mandatory")
+    @CustomEmail(message = "Email should be in a proper format with .com or .co domain")
     private String email;
 
     @ValidPassword(message = "Password must contain at least one lowercase letter, one uppercase letter, one digit, one special character, and be at least 8 characters long")
