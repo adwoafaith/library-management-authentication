@@ -1,12 +1,13 @@
 package com.alibou.library.handler;
 
+import com.alibou.library.CustomerAnnotations.ValidatePassword;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 
-public class PasswordConstraintValidator implements ConstraintValidator <ValidPassword, String> {
+public class PasswordConstraintValidator implements ConstraintValidator <ValidatePassword, String> {
 
     @Override
-    public void initialize(ValidPassword constraintAnnotation) {
+    public void initialize(ValidatePassword constraintAnnotation) {
     }
 
     @Override

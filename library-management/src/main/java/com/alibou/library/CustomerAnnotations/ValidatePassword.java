@@ -1,5 +1,6 @@
-package com.alibou.library.handler;
+package com.alibou.library.CustomerAnnotations;
 
+import com.alibou.library.handler.PasswordConstraintValidator;
 import jakarta.validation.Constraint;
 import jakarta.validation.Payload;
 
@@ -15,7 +16,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Constraint(validatedBy = PasswordConstraintValidator.class)
 @Target({ FIELD })
 @Retention(RUNTIME)
-public @interface ValidPassword {
+public @interface ValidatePassword {
     String message() default "Invalid Password";
     Class<?>[] groups() default {};
     Class<? extends Payload>[] payload() default {};
