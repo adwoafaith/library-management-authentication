@@ -12,7 +12,7 @@ public enum BusinessErrorCodes {
 
     NO_CODE(0,NOT_IMPLEMENTED,"No Code"),
     INCORRECT_CURRENT_PASSWORD(300,BAD_REQUEST, "Current password is incorrect"),
-    NEW_PASSWORD_DOES_NOT_MATH(301,BAD_REQUEST, "The new password does not math"),
+    NEW_PASSWORD_DOES_NOT_MATH(301,BAD_REQUEST, "The new password does not match"),
     ACCOUNT_LOCKED(302,FORBIDDEN,"User account is locked"),
     ACCOUNT_DISABLED(303,FORBIDDEN,"User account not verified"),
     BAD_CREDENTIALS(400,BAD_REQUEST, "Invalid email or password"),

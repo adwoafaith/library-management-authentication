@@ -17,14 +17,16 @@ import java.util.Map;
 import java.util.function.Function;
 
 @Service
-
-//(this service will generate the token, validate the token extract the username and so on and so forth
 public class JwtService {
-    private long jwtExpiration;
+//(this service will generate the token, validate the token extract the username and so on and so forth
+
     @Value("${spring.application.security.jwt.secret-key}")
     private String secretKey;
+
     @Value("${spring.application.security.jwt.expiration}")
     private long expiration;
+
+
 
     public String generateToken(UserDetails userDetails) {
         return generateToken(new HashMap<>(), userDetails);
@@ -32,20 +34,22 @@ public class JwtService {
 
     public String generateToken(Map<String,Object> claims, UserDetails userDetails) {
 
-        return buildToken(claims, userDetails,jwtExpiration);
+        return buildToken(claims, userDetails,expiration);
     }
 
-    private String buildToken(Map<String, Object> extraClaims, UserDetails userDetails, long jwtExpiration) {
+    private String buildToken(Map<String, Object> extraClaims, UserDetails userDetails, long expiration) {
         var authorities = userDetails.getAuthorities()
         .stream()
                 .map(GrantedAuthority::getAuthority)
                 .toList();
+        Date exipirationDate = new Date (System.currentTimeMillis() + expiration);
+        System.out.printf(exipirationDate.toString() + "This is the expiration time");
         return Jwts
                 .builder()
                 .setClaims(extraClaims)
                 .setSubject(userDetails.getUsername())
                 .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + jwtExpiration))
+                .setExpiration(new Date(System.currentTimeMillis() + expiration))
                 .claim("authorities",authorities)
                 .signWith(getSignInKey())
                 .compact();
