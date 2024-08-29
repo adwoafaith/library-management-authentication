@@ -63,7 +63,7 @@ public class AuthenticationService {
         var userRole = roleRepository.findByRole("USER")
 
                 //todo - better exception handling
-                .orElseThrow(() -> new IllegalStateException( "User role not found"));
+                .orElseThrow(() ->  new BusinessException(BusinessErrorCodes.USER_ROLE_NOT_FOUND));
         var user = User.builder()
                 .firstname(request.getFirstName().trim())
                 .lastname(request.getLastName().trim())
