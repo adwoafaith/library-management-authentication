@@ -1,11 +1,12 @@
 package com.alibou.library.Controller;
 
-import com.alibou.library.Request.loginRequest;
 import com.alibou.library.Request.RegistrationRequest;
+import com.alibou.library.Request.loginRequest;
 import com.alibou.library.response.ActivationResponse;
 import com.alibou.library.response.LoginResponse;
 import com.alibou.library.response.RegistrationResponse;
 import com.alibou.library.services.AuthenticationService;
+import com.alibou.library.services.ChangePasswordService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.mail.MessagingException;
 import jakarta.validation.Valid;
@@ -22,7 +23,6 @@ import org.springframework.web.bind.annotation.*;
 
 public class Authentication {
     private final AuthenticationService service;
-    private final AuthenticationService authenticationService;
 
 
     @PostMapping("/register")
@@ -42,7 +42,7 @@ public class Authentication {
     }
 
     @GetMapping("/activate-account")
-    public ResponseEntity<ActivationResponse> confrimAccount(
+    public ResponseEntity<ActivationResponse> confirmAccount(
             @RequestParam String token
     ) throws MessagingException {
          return service.activateAccount(token);

@@ -1,11 +1,11 @@
 package com.alibou.library.handler;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
+
 import lombok.Getter;
 import org.springframework.http.HttpStatus;
 
 import static org.springframework.http.HttpStatus.*;
+
 
 @Getter
 public enum BusinessErrorCodes {
@@ -18,12 +18,9 @@ public enum BusinessErrorCodes {
     BAD_CREDENTIALS(400,BAD_REQUEST, "Invalid email or password"),
     USER_NOT_FOUND(404, NOT_FOUND, "User not found"),
     EMAIL_ALREADY_EXISTS(409,CONFLICT,"Email already exists");
-    ;
-    @Getter
+
     private final int code;
-    @Getter
     private final String description;
-    @Getter
     private final HttpStatus httpStatus;
 
     BusinessErrorCodes(int code,HttpStatus httpStatus,String description) {

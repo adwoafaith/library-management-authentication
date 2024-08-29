@@ -20,11 +20,11 @@ import java.util.function.Function;
 public class JwtService {
 //(this service will generate the token, validate the token extract the username and so on and so forth
 
-    @Value("${spring.application.security.jwt.secret-key}")
-    private String secretKey;
+    @Value("${secret-key}")
+    private String SECRET_KEY;
 
-    @Value("${spring.application.security.jwt.expiration}")
-    private long expiration;
+    @Value("${jwtExpiration}")
+    private long JWT_EXPIRATION;
 
 
 
@@ -34,7 +34,7 @@ public class JwtService {
 
     public String generateToken(Map<String,Object> claims, UserDetails userDetails) {
 
-        return buildToken(claims, userDetails,expiration);
+        return buildToken(claims, userDetails, JWT_EXPIRATION);
     }
 
     private String buildToken(Map<String, Object> extraClaims, UserDetails userDetails, long expiration) {
@@ -43,7 +43,7 @@ public class JwtService {
                 .map(GrantedAuthority::getAuthority)
                 .toList();
         Date exipirationDate = new Date (System.currentTimeMillis() + expiration);
-        System.out.printf(exipirationDate.toString() + "This is the expiration time");
+        System.out.printf(exipirationDate + "This is the expiration time");
         return Jwts
                 .builder()
                 .setClaims(extraClaims)
@@ -89,7 +89,7 @@ public class JwtService {
 
     private Key getSignInKey() {
 
-        byte[] keyBytes = Decoders.BASE64.decode(secretKey);
+        byte[] keyBytes = Decoders.BASE64.decode(SECRET_KEY);
         return Keys.hmacShaKeyFor(keyBytes);
     }
 
