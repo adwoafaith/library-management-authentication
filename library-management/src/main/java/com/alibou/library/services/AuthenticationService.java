@@ -140,6 +140,7 @@ public class AuthenticationService {
                     .message("Login sucessful")
                     .statusCode(200)
                     .token(jwtToken)
+                    .userId(String.valueOf(user.getId()))
                     .build());
         } catch (BadCredentialsException e) {
 
@@ -159,7 +160,7 @@ public class AuthenticationService {
                 throw new TokenNotFoundException.TokenExpiredException("Token has expired. A new token has been sent to your email");
             }
 
-            var user = userRepository.findById(savedToken.getUser().getId())
+            var user = userRepository.findById(String.valueOf(savedToken.getUser().getId()))
                     .orElseThrow(() -> new TokenNotFoundException.UserNotFoundException("User does not exist"));
 
             user.setEnabled(true);

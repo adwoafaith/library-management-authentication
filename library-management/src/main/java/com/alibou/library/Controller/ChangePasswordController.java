@@ -13,20 +13,19 @@ import java.security.Principal;
 
 
 @RestController
-@RequestMapping("/api/v1/change-password")
+@RequestMapping("/api/v1/change-password/{userId}")
 @RequiredArgsConstructor
 
 
 public class ChangePasswordController {
     private final ChangePasswordService changePasswordService;
 
-        @PostMapping
+        @PutMapping
         public ResponseEntity<?> changePassword(@Valid
-                @RequestBody ChangePasswordRequest request,
-                Principal principal
+                @RequestBody ChangePasswordRequest request,@PathVariable String userId
         ) {
 
-            changePasswordService.changePassword(request,principal);
+            changePasswordService.changePassword(request,userId);
             return ResponseEntity.ok("Password changed successfully");
         }
 }

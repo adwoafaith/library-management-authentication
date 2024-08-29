@@ -23,5 +23,8 @@ public class LoginResponse {
     @JsonProperty("token")
     private String token;
 
+    @JsonProperty("userId")
+    private String userId;
+
 
 }
