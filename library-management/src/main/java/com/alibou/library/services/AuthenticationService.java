@@ -45,7 +45,7 @@ public class AuthenticationService {
     private final JwtService jwtService;
 
 
-    @Value("${spring.application.mailing.frontend.activation-url}")
+    @Value("${confirmationUrl}")
     private String activationUrl;
 
 
@@ -63,7 +63,7 @@ public class AuthenticationService {
         var userRole = roleRepository.findByRole("USER")
 
                 //todo - better exception handling
-                .orElseThrow(() -> new IllegalStateException( "User role not found"));
+                .orElseThrow(() ->  new BusinessException(BusinessErrorCodes.USER_ROLE_NOT_FOUND));
         var user = User.builder()
                 .firstname(request.getFirstName().trim())
                 .lastname(request.getLastName().trim())
@@ -77,7 +77,7 @@ public class AuthenticationService {
 
         sendValidationEmail(user);
         return ResponseEntity.ok(RegistrationResponse.builder()
-                .message("User registered Sucessfully.Please check your mail for verification")
+                .message("User registered Successfully.Please check your mail for verification")
                         .statusCode(200)
                 .build());
 
@@ -134,10 +134,11 @@ public class AuthenticationService {
             );
             var claims = new HashMap<String, Object>();
             var user = ((User) auth.getPrincipal());
-            claims.put("fullname", user.fullname());
+            claims.put("fullName", user.fullname());
             var jwtToken = jwtService.generateToken(claims, user);
             return ResponseEntity.ok(LoginResponse.builder()
-                    .message("Login sucessful")
+                    .id(String.valueOf(user.getId()))
+                    .message("Login successful!")
                     .statusCode(200)
                     .token(jwtToken)
                     .userId(String.valueOf(user.getId()))
